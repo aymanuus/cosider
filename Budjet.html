@@ -176,17 +176,33 @@
         margin-left: 0;
       }
     }
+    /* Scrollable sidebar style */
+.sidebar {
+  height: 100vh;              /* Full height of the viewport */
+  overflow-y: auto;           /* Enable vertical scroll when content overflows */
+  overflow-x: hidden;         /* Optional: hide horizontal scroll */
+}
+
   </style>
 
 </head>
 <body>
 
   <!-- Sidebar -->
-<aside class="sidebar" id="sidebar">
+   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <img src="cosider2.png" alt="Logo Cosider" class="sidebar-logo" />
-      <span class="close-btn" onclick="toggleSidebar()">✖</span>
     </div>
+
+    <div class="profile-dropdown">
+      <a class="profile-btn" href="profile.html">
+        <i class="fas fa-user-circle"></i> Profil
+      </a>
+    
+      <a href="profile.html"><i class="fas fa-user"></i> Mon Profil</a>
+      <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+    </div>
+
     <ul class="sidebar-menu">
       <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Accueil</a></li>
       <li>
@@ -198,13 +214,17 @@
       <li>
         <a href="#"><i class="fa-solid fa-truck-pickup"></i> Matériels</a>
         <ul class="submenu">
-          <li><a href="listemateriels.html">▫️ Liste Matériels</a></li>
-          <li><a href="listemarques.html">▫️ Liste Marques</a></li>
-          <li><a href="#">▫️ Structure</a></li>
-          <li><a href="#">▫️ NT</a></li>
+          <li><a href="messagerie.html"><i class="fa-brands fa-rocketchat"></i> Messagerie</a></li>
+          <li><a href="ordredereparation.html"><i class="fa-solid fa-screwdriver-wrench"></i> Ordre de réparation</a></li>
+          <li><a href="listordres.html"><i class="fa-solid fa-list-check"></i> Liste des Ordres de Réparation</a></li>
+          <li><a href="listemateriels.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des Matériels</a></li>
+          <li><a href="listemarques.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des Marques </a></li>
+          <li><a href="demandessercice.html"><i class="fa-solid fa-screwdriver-wrench"></i> Demande de Service</a></li>
+          <li><a href="internenvants.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des intervenants</a></li>
+          <li><a href="structures.html">▫️ Structure</a></li>
+          <li><a href="nt.html">▫️ NT</a></li>
         </ul>
       </li>
-      <li><a href="messagerie.html"><i class="fa-brands fa-rocketchat"></i> Messagerie</a></li>
       <li>
         <a href="#"><i class="fa-solid fa-sliders"></i> Parametre</a>
         <ul class="submenu">
@@ -218,12 +238,12 @@
           </li>
           <li><a href="#"><i class="fa-brands fa-ubuntu"></i> Operation</a></li>
           <li><a href="#"><i class="fa-solid fa-cube"></i> PDR</a></li>
-          <li><a href="structures.html"><i class="fa-solid fa-building"></i> Gestion des Structures</a></li> <!-- Ajouté ici -->
+          <li><a href="demandessercice.html"><i class="fa-solid fa-cube"></i> Demande de Service</a></li>
+          <li><a href="#"><i class="fa-solid fa-file-invoice"></i> Document d'acompagnement</a></li>
         </ul>
       </li>
     </ul>
-</aside>
-
+  </aside>
 
 
   <!-- Menu Toggle Button -->

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Planning Matériels - Cosider</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
+</head>
+<body class="light-mode">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="cosider2.png" alt="Logo Cosider" class="sidebar-logo" />
+      <span class="close-btn" onclick="toggleSidebar()">✖</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Accueil</a></li>
+      <li><a href="materiels.html"><i class="fas fa-tools"></i> Matériels</a></li>
+      <li><a href="marques.html"><i class="fas fa-copyright"></i> Marques</a></li>
+      <li><a href="planning.html" class="active"><i class="fas fa-calendar-alt"></i> Planning</a></li>
+      <li><a href="#"><i class="fas fa-chart-bar"></i> Rapports</a></li>
+      <li><a href="messagerie.html"><i class="fas fa-comments"></i> Messagerie</a></li>
+      <li><a href="#"><i class="fas fa-user-circle"></i> Profil</a></li>
+      <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <h1>Planning Annuel des Matériels de Chantiers</h1>
+      <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</button>
+    </div>
+
+    <!-- Filtres Année -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label for="anneeFilter"><i class="fas fa-filter"></i> Filtre par Année:</label>
+        <select id="anneeFilter" onchange="filterByYear()">
+          <option value="all">Toutes les années</option>
+          <option value="2023">2023</option>
+          <option value="2024">2024</option>
+          <option value="2025" selected>2025</option>
+          <option value="2026">2026</option>
+        </select>
+      </div>
+      <button class="btn-generate" onclick="generateReport()">
+        <i class="fas fa-file-pdf"></i> Générer Rapport
+      </button>
+    </div>
+
+    <!-- Tableau Planning -->
+    <div class="table-container">
+      <table id="planningTable">
+        <thead>
+          <tr>
+            <th>Année</th>
+            <th>Chantier</th>
+            <th>Période d'utilisation</th>
+            <th>Matériel</th>
+            <th>Quantité</th>
+            <th>Montant Alloué (DZD)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2025</td>
+            <td>Projet Autoroute Est-Ouest</td>
+            <td>Mars 2025 - Nov 2025 (9 mois)</td>
+            <td>Bulldozer CAT D6</td>
+            <td>3 unités</td>
+            <td>37,500,000</td>
+            <td>
+              <button class="action-btn edit" onclick="editPlanning(1)"><i class="fas fa-edit"></i></button>
+              <button class="action-btn delete" onclick="deletePlanning(1)"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>2025</td>
+            <td>Projet Logements Alger</td>
+            <td>Jan 2025 - Déc 2025 (12 mois)</td>
+            <td>Pelle Komatsu PC200</td>
+            <td>2 unités</td>
+            <td>19,600,000</td>
+            <td>
+              <button class="action-btn edit" onclick="editPlanning(2)"><i class="fas fa-edit"></i></button>
+              <button class="action-btn delete" onclick="deletePlanning(2)"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Formulaire Ajout/Modification -->
+    <div id="planningForm" class="planning-form-container" style="display:none;">
+      <div class="form-header">
+        <h3><i class="fas fa-calendar-plus"></i> <span id="formTitle">Nouvelle Planification</span></h3>
+        <button class="close-btn" onclick="closePlanningForm()"><i class="fas fa-times"></i></button>
+      </div>
+      
+      <form id="addPlanningForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="planningAnnee">Année:</label>
+            <select id="planningAnnee" required>
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+              <option value="2025" selected>2025</option>
+              <option value="2026">2026</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="planningChantier">Chantier:</label>
+            <select id="planningChantier" required>
+              <option value="">Sélectionner...</option>
+              <option value="1">Projet Autoroute Est-Ouest</option>
+              <option value="2">Projet Logements Alger</option>
+              <option value="3">Projet Pont Chéraga</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+              <label for="dateDebut">Date Début:</label>
+              <input type="text" id="dateDebut" placeholder="Sélectionner une date" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="dateFin">Date Fin:</label>
+              <input type="text" id="dateFin" placeholder="Sélectionner une date" required>
+            </div>
+          </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="planningMateriel">Matériel:</label>
+            <select id="planningMateriel" required onchange="updatePrixUnitaire()">
+              <option value="">Sélectionner...</option>
+              <option value="1" data-prix="12500000">Bulldozer CAT D6</option>
+              <option value="2" data-prix="9800000">Pelle Komatsu PC200</option>
+              <option value="3" data-prix="8200000">Camion Mercedes</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="quantite">Quantité:</label>
+            <input type="number" id="quantite" min="1" value="1" required onchange="calculerMontant()">
+          </div>
+        </div>
+        
+        
+        
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" onclick="closePlanningForm()">Annuler</button>
+          <button type="submit" class="btn-submit">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Bouton Ajout -->
+    <div class="add-button-container">
+      <button class="btn-add" onclick="showPlanningForm()">
+        <i class="fas fa-plus"></i> Ajouter Planification
+      </button>
+    </div>
+  </div>
+
+
+
+
+
+  <script>
+    // Variables globales
+    let currentEditingId = null;
+  
+    // Fonctions de base
+    function toggleSidebar() {
+      document.getElementById("sidebar").classList.toggle("active");
+    }
+  
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+  
+    // Filtrage par année
+    function filterByYear() {
+      const year = document.getElementById('anneeFilter').value;
+      const rows = document.querySelectorAll('#planningTable tbody tr');
+      
+      rows.forEach(row => {
+        if (year === 'all' || row.cells[0].textContent === year) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+  
+    // Initialisation des datepickers
+    function initDatePickers() {
+      flatpickr.localize(flatpickr.l10ns.fr);
+      
+      flatpickr("#dateDebut", {
+        dateFormat: "d/m/Y",
+        locale: "fr",
+        onChange: function(selectedDates) {
+          if (selectedDates.length > 0) {
+            document.getElementById('dateFin')._flatpickr.set('minDate', selectedDates[0]);
+          }
+        }
+      });
+      
+      flatpickr("#dateFin", {
+        dateFormat: "d/m/Y",
+        locale: "fr"
+      });
+    }
+  
+    // Gestion du formulaire
+    function showPlanningForm(id = null) {
+      currentEditingId = id;
+      const form = document.getElementById('planningForm');
+      const title = document.getElementById('formTitle');
+      
+      if (id) {
+        title.textContent = 'Modifier Planification';
+        // Charger les données existantes (simulé)
+        document.getElementById('planningAnnee').value = '2025';
+        document.getElementById('planningChantier').value = '1';
+        document.getElementById('dateDebut').value = '01/03/2025';
+        document.getElementById('dateFin').value = '30/11/2025';
+        document.getElementById('planningMateriel').value = '1';
+        document.getElementById('quantite').value = '3';
+      } else {
+        title.textContent = 'Nouvelle Planification';
+        document.getElementById('addPlanningForm').reset();
+      }
+      
+      form.style.display = 'block';
+      form.scrollIntoView({ behavior: 'smooth' });
+      
+      // Réinitialiser les datepickers si besoin
+      if (window.flatpickr) {
+        const debutPicker = document.getElementById('dateDebut')._flatpickr;
+        const finPicker = document.getElementById('dateFin')._flatpickr;
+        
+        if (debutPicker) debutPicker.clear();
+        if (finPicker) finPicker.clear();
+      }
+    }
+  
+    function closePlanningForm() {
+      document.getElementById('planningForm').style.display = 'none';
+      currentEditingId = null;
+    }
+  
+    // Fonctions utilitaires pour les dates
+    function parseDate(dateStr) {
+      const parts = dateStr.split('/');
+      return new Date(parts[2], parts[1] - 1, parts[0]);
+    }
+  
+    function formatDate(date) {
+      return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+  
+    // Gestion de la soumission du formulaire
+    document.getElementById('addPlanningForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Récupération des valeurs
+      const annee = document.getElementById('planningAnnee').value;
+      const chantier = document.getElementById('planningChantier').options[document.getElementById('planningChantier').selectedIndex].text;
+      const dateDebut = document.getElementById('dateDebut').value;
+      const dateFin = document.getElementById('dateFin').value;
+      const materiel = document.getElementById('planningMateriel').options[document.getElementById('planningMateriel').selectedIndex].text;
+      const quantite = document.getElementById('quantite').value;
+      
+      // Validation des dates
+      if (!dateDebut || !dateFin) {
+        alert("Veuillez sélectionner les dates de début et de fin");
+        return;
+      }
+      
+      const debut = parseDate(dateDebut);
+      const fin = parseDate(dateFin);
+      
+      if (fin < debut) {
+        alert("La date de fin doit être postérieure à la date de début");
+        return;
+      }
+      
+      // Calcul de la période
+      const moisDiff = (fin.getFullYear() - debut.getFullYear()) * 12 + (fin.getMonth() - debut.getMonth()) + 1;
+      const periode = `${formatDate(debut)} - ${formatDate(fin)} (${moisDiff} mois)`;
+      
+      if (currentEditingId) {
+        alert(`Planification ${currentEditingId} mise à jour !\nPériode: ${periode}`);
+      } else {
+        alert(`Nouvelle planification enregistrée !\nPériode: ${periode}`);
+      }
+      
+      closePlanningForm();
+    });
+  
+    // Fonctions d'actions
+    function editPlanning(id) {
+      showPlanningForm(id);
+    }
+  
+    function deletePlanning(id) {
+      if (confirm('Voulez-vous vraiment supprimer cette planification ?')) {
+        alert(`Planification ${id} supprimée (simulation)`);
+      }
+    }
+  
+    function generateReport() {
+      alert('Génération du rapport PDF en cours...');
+    }
+  
+    // Initialisation au chargement
+    document.addEventListener('DOMContentLoaded', function() {
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+      }
+      
+      filterByYear();
+      initDatePickers();
+    });
+  </script>
+
+
+
+</body>
+</html>

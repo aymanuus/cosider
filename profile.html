@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="dashboard.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil Utilisateur | Cosider</title>
+  <style>
+    /* Profile Dropdown */
+.profile-dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: 15px;
+}
+
+.profile-btn {
+  background: #b71c1c;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-btn:hover {
+  background: #8e0000;
+}
+
+/* Profile Card */
+.profile-card {
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.profile-avatar {
+  font-size: 80px;
+  color: #b71c1c;
+  margin-bottom: 15px;
+}
+
+.profile-section {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-section h3 {
+  color: #b71c1c;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.info-item {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #555;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.info-value {
+  color: #333;
+}
+
+/* Dark Mode */
+body.dark-mode .profile-card,
+body.dark-mode .info-item {
+  background: #1e1e1e;
+}
+
+body.dark-mode .info-value {
+  color: #e0e0e0;
+}
+
+body.dark-mode .info-label {
+  color: #aaa;
+}
+
+body.dark-mode .profile-section {
+  border-bottom-color: #444;
+}
+/* Scrollable sidebar style */
+.sidebar {
+  height: 100vh;              /* Full height of the viewport */
+  overflow-y: auto;           /* Enable vertical scroll when content overflows */
+  overflow-x: hidden;         /* Optional: hide horizontal scroll */
+}
+
+    </style>
+</head>
+<body class="light-mode">
+     <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="cosider2.png" alt="Logo Cosider" class="sidebar-logo" />
+    </div>
+
+    <div class="profile-dropdown">
+      <a class="profile-btn" href="profile.html">
+        <i class="fas fa-user-circle"></i> Profil
+      </a>
+    
+      <a href="profile.html"><i class="fas fa-user"></i> Mon Profil</a>
+      <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Accueil</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-bars"></i> Menu principale</a>
+        <ul class="submenu">
+          <li><a href="budjet.html">▫️ Budjet</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#"><i class="fa-solid fa-truck-pickup"></i> Matériels</a>
+        <ul class="submenu">
+          <li><a href="messagerie.html"><i class="fa-brands fa-rocketchat"></i> Messagerie</a></li>
+          <li><a href="ordredereparation.html"><i class="fa-solid fa-screwdriver-wrench"></i> Ordre de réparation</a></li>
+          <li><a href="listordres.html"><i class="fa-solid fa-list-check"></i> Liste des Ordres de Réparation</a></li>
+          <li><a href="listemateriels.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des Matériels</a></li>
+          <li><a href="listemarques.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des Marques </a></li>
+          <li><a href="demandessercice.html"><i class="fa-solid fa-screwdriver-wrench"></i> Demande de Service</a></li>
+          <li><a href="internenvants.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des intervenants</a></li>
+          <li><a href="structures.html">▫️ Structure</a></li>
+          <li><a href="nt.html">▫️ NT</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#"><i class="fa-solid fa-sliders"></i> Parametre</a>
+        <ul class="submenu">
+          <li>
+            <a href="#"><i class="fa-solid fa-street-view"></i> Direction</a>
+            <ul class="submenu">
+              <li><a href="#">▫️ Equipement</a></li>
+              <li><a href="#">▫️ Gamme</a></li>
+              <li><a href="#">▫️ Intervention</a></li>
+            </ul>
+          </li>
+          <li><a href="#"><i class="fa-brands fa-ubuntu"></i> Operation</a></li>
+          <li><a href="#"><i class="fa-solid fa-cube"></i> PDR</a></li>
+          <li><a href="demandessercice.html"><i class="fa-solid fa-cube"></i> Demande de Service</a></li>
+          <li><a href="#"><i class="fa-solid fa-file-invoice"></i> Document d'acompagnement</a></li>
+        </ul>
+      </li>
+    </ul>
+  </aside>
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <h1>Profil Utilisateur</h1>
+      <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</button>
+    </div>
+
+    <!-- Profile Card -->
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-avatar">
+          <i class="fas fa-user-circle"></i>
+        </div>
+        <h2 id="username">Nom d'utilisateur</h2>
+      </div>
+
+      <div class="profile-section">
+        <h3><i class="fas fa-user-shield"></i> Informations du compte</h3>
+        <div class="profile-info">
+          <div class="info-item">
+            <span class="info-label">Nom complet:</span>
+            <span class="info-value" id="fullname">Admin User</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Email:</span>
+            <span class="info-value" id="email">admin@cosider.dz</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Rôle:</span>
+            <span class="info-value" id="role">Administrateur</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h3><i class="fas fa-key"></i> Changer le mot de passe</h3>
+        <form id="changePasswordForm">
+          <div class="form-group">
+            <label for="currentPassword">Mot de passe actuel:</label>
+            <input type="password" id="currentPassword" required>
+          </div>
+          <div class="form-group">
+            <label for="newPassword">Nouveau mot de passe:</label>
+            <input type="password" id="newPassword" required>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirmer le nouveau mot de passe:</label>
+            <input type="password" id="confirmPassword" required>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" onclick="resetPasswordForm()">
+              <i class="fas fa-times"></i> Annuler
+            </button>
+            <button type="submit" class="btn-submit">
+              <i class="fas fa-save"></i> Enregistrer
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    function toggleSidebar() {
+      document.getElementById("sidebar").classList.toggle("active");
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+
+    // Charger les données utilisateur
+    document.addEventListener('DOMContentLoaded', function() {
+      // Récupérer les données utilisateur depuis le localStorage ou une API
+      const userData = JSON.parse(localStorage.getItem('userData')) || {
+        username: 'admin',
+        fullname: 'Admin User',
+        email: 'admin@cosider.dz',
+        role: 'Administrateur'
+      };
+      
+      document.getElementById('username').textContent = userData.username;
+      document.getElementById('fullname').textContent = userData.fullname;
+      document.getElementById('email').textContent = userData.email;
+      document.getElementById('role').textContent = userData.role;
+    });
+// Gestion du changement de mot de passe
+    document.getElementById('changePasswordForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      if (newPassword !== confirmPassword) {
+        alert("Les nouveaux mots de passe ne correspondent pas!");
+        return;
+      }
+      
+      // Ici, vous devriez envoyer ces données au serveur pour validation et mise à jour
+      alert("Mot de passe changé avec succès!");
+      this.reset();
+    });
+
+    function resetPasswordForm() {
+      document.getElementById('changePasswordForm').reset();
+    }
+
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+    
+  </script>
+</body>
+</html>

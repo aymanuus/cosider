@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Demandes de Service | Cosider</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <style>
+    /* Scrollable sidebar style */
+.sidebar {
+  height: 100vh;              /* Full height of the viewport */
+  overflow-y: auto;           /* Enable vertical scroll when content overflows */
+  overflow-x: hidden;         /* Optional: hide horizontal scroll */
+}
+
+    </style>
+</head>
+<body class="light-mode">
+
+ <!-- Sidebar -->
+   <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="cosider2.png" alt="Logo Cosider" class="sidebar-logo" />
+    </div>
+
+    <div class="profile-dropdown">
+      <a class="profile-btn" href="profile.html">
+        <i class="fas fa-user-circle"></i> Profil
+      </a>
+    
+      <a href="profile.html"><i class="fas fa-user"></i> Mon Profil</a>
+      <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Accueil</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-bars"></i> Menu principale</a>
+        <ul class="submenu">
+          <li><a href="budjet.html">▫️ Budjet</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#"><i class="fa-solid fa-truck-pickup"></i> Matériels</a>
+        <ul class="submenu">
+          <li><a href="messagerie.html"><i class="fa-brands fa-rocketchat"></i> Messagerie</a></li>
+          <li><a href="ordredereparation.html"><i class="fa-solid fa-screwdriver-wrench"></i> Ordre de réparation</a></li>
+          <li><a href="listordres.html"><i class="fa-solid fa-list-check"></i> Liste des Ordres de Réparation</a></li>
+          <li><a href="listemateriels.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des Matériels</a></li>
+          <li><a href="listemarques.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des Marques </a></li>
+          <li><a href="demandessercice.html"><i class="fa-solid fa-screwdriver-wrench"></i> Demande de Service</a></li>
+          <li><a href="internenvants.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des intervenants</a></li>
+          <li><a href="structures.html">▫️ Structure</a></li>
+          <li><a href="nt.html">▫️ NT</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#"><i class="fa-solid fa-sliders"></i> Parametre</a>
+        <ul class="submenu">
+          <li>
+            <a href="#"><i class="fa-solid fa-street-view"></i> Direction</a>
+            <ul class="submenu">
+              <li><a href="#">▫️ Equipement</a></li>
+              <li><a href="#">▫️ Gamme</a></li>
+              <li><a href="#">▫️ Intervention</a></li>
+            </ul>
+          </li>
+          <li><a href="#"><i class="fa-brands fa-ubuntu"></i> Operation</a></li>
+          <li><a href="#"><i class="fa-solid fa-cube"></i> PDR</a></li>
+          <li><a href="demandessercice.html"><i class="fa-solid fa-cube"></i> Demande de Service</a></li>
+          <li><a href="#"><i class="fa-solid fa-file-invoice"></i> Document d'acompagnement</a></li>
+        </ul>
+      </li>
+    </ul>
+  </aside>
+  
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <h1>Gestion des Demandes de Service - Cosider</h1>
+      <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</button>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      
+      
+      
+      <div class="action-buttons">
+        <button class="action-btn add-btn" onclick="openDemandeModal()">
+          <i class="fas fa-plus-circle"></i>
+          <span>Nouvelle Demande</span>
+        </button>
+        
+        <!-- Bouton d'impression ajouté ici -->
+        <button class="action-btn print-btn" onclick="printDemandes()">
+          <i class="fas fa-print"></i>
+          <span>Imprimer</span>
+        </button>
+      
+        <div class="dropdown">
+          <button class="action-btn export-btn">
+            <i class="fas fa-file-export"></i>
+            <span>Exporter</span>
+          </button>
+          <div class="dropdown-content">
+            <a href="#" onclick="exportToExcel()"><i class="fas fa-file-excel"></i> Excel</a>
+            <a href="#" onclick="exportToPDF()"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal d'ajout de demande -->
+    <div id="demandeModal" class="modal">
+      <div class="modal-content">
+        <h3>Nouvelle Demande de Service</h3>
+        <label for="N° DS">N° DS</label>
+        <input type="text" id="N° DS" placeholder="Ex: 12314">
+        <label for="N° Intervention">N° Intervention</label>
+        <input type="text" id="N° Intervention"  placeholder="Ex: 12314" >
+        <label for="dateDS">Date DS</label>
+        <input type="date" id="dateDS">
+        <label for="lieu">Lieu</label>
+        <input type="text" id="lieu" placeholder="Ex: Alger">
+        <label for="dateSouhaitee">Date souhaitée</label>
+        <input type="date" id="dateSouhaitee">
+        <label for="codeMat">Code Mat</label>
+        <input type="text" id="codeMat" placeholder="Ex: CM-1234">
+        <label for="typeDS">Type</label>
+        <select id="typeDS" onchange="handleTypeDSChange()">
+          <option value="">-- Sélectionner --</option>
+          <option value="Fournir">Fournir</option>
+          <option value="Réparation">Réparation</option>
+          <option value="Information">Information</option>
+          <option value="Consultation">Consultation</option>
+          <option value="Autre">Autre</option>
+        </select>
+        
+        <div id="reparationFields" style="display:none; margin-top:10px;">
+          <label for="causePanne">Cause panne</label>
+          <input type="text" id="causePanne" placeholder="Cause de la panne">
+          <label for="naturePanne">Nature panne</label>
+          <input type="text" id="naturePanne" placeholder="Nature de la panne">
+          <label for="nomConducteur">Nom conducteur</label>
+          <input type="text" id="nomConducteur" placeholder="Nom du conducteur">
+          <label for="datePrevReparation">Date prévue réparation</label>
+          <input type="date" id="datePrevReparation">
+        </div>
+        </select>
+        
+        <label for="description">Description</label>
+        <textarea id="description" rows="3" placeholder="Décrire la demande..."></textarea>
+        <div class="modal-buttons">
+          <button class="cancel-btn" onclick="closeDemandeModal()">Annuler</button>
+          <button class="save-btn" onclick="saveDemande()">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tableau des Demandes -->
+    <div class="material-table-container">
+      <div class="table-header">
+        <h2><i class="fas fa-list"></i> Liste des Demandes de Service</h2>
+        <div class="table-actions">
+          <input type="text" id="searchDemande" placeholder="Rechercher..." onkeyup="searchDemandes()">
+          <select id="filterType" onchange="filterDemandes()">
+            <option value="all">Tous les types</option>
+            <option value="Fournir">Fournir</option>
+            <option value="Faire">Faire</option>
+            <option value="Réparer">Réparer</option>
+            <option value="Contrôler">Contrôler</option>
+            <option value="Informer">Informer</option>
+          </select>
+        </div>
+      </div>
+
+      <table id="demandesTable">
+        <thead>
+          <tr>
+            <th>N°</th>
+            <th>N° DS</th>
+            <th>N° Intervention</th>
+            <th>Date DS</th>
+            <th>Lieu</th>
+            <th>Date souhaitée</th>
+            <th>Code Mat</th>
+            <th>Type</th>
+            <th>Description de DS</th>
+            <th>Cause panne</th>
+            <th>Nature panne</th>
+            <th>Nom conducteur</th>
+            <th>Date prévue réparation</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Exemple de ligne -->
+          <tr>
+            <td>1</td>
+            <td>12314</td>
+            <td>INT-001</td>
+            <td>2024-03-20</td>
+            <td>Alger</td>
+            <td>2024-03-25</td>
+            <td>CM-1234</td>
+            <td>Réparation</td>
+            <td>Réparation bulldozer D25 - panne moteur</td>
+            <td>Panne moteur</td>
+            <td>Moteur endommagé</td>
+            <td>Jean Dupont</td>
+            <td>2024-04-01</td>
+            <td><span class="statut-en-cours">En cours</span></td>
+            <td>
+              <button class="action-btn edit" onclick="editDemande(1)"><i class="fas fa-edit"></i></button>
+              <button class="action-btn delete" onclick="deleteDemande(1)"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="table-footer">
+        <div class="pagination">
+          <button onclick="prevPage()"><i class="fas fa-chevron-left"></i></button>
+          <span>Page <span id="currentPage">1</span> sur 3</span>
+          <button onclick="nextPage()"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    function toggleSidebar() {
+      document.getElementById("sidebar").classList.toggle("active");
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+
+    // Modal gestion
+    function openDemandeModal() {
+      document.getElementById('demandeModal').style.display = 'block';
+    }
+    function closeDemandeModal() {
+      document.getElementById('demandeModal').style.display = 'none';
+    }
+    window.onclick = function(event) {
+      const modal = document.getElementById('demandeModal');
+      if (event.target == modal) closeDemandeModal();
+    }
+
+    function handleTypeDSChange() {
+      var type = document.getElementById('typeDS').value;
+      var reparationFields = document.getElementById('reparationFields');
+      if (type === 'Réparation') {
+        reparationFields.style.display = 'block';
+      } else {
+        reparationFields.style.display = 'none';
+      }
+    }
+
+    function saveDemande() {
+      // Champs principaux
+      const numDS = document.getElementById('N° DS').value;
+      const numInterv = document.getElementById('N° Intervention').value;
+      const dateDS = document.getElementById('dateDS').value;
+      const lieu = document.getElementById('lieu').value;
+      const dateSouhaitee = document.getElementById('dateSouhaitee').value;
+      const codeMat = document.getElementById('codeMat').value;
+      const typeDS = document.getElementById('typeDS').value;
+      const descriptionDS = document.getElementById('descriptionDS').value;
+      // Champs réparation
+      const causePanne = document.getElementById('causePanne').value;
+      const naturePanne = document.getElementById('naturePanne').value;
+      const nomConducteur = document.getElementById('nomConducteur').value;
+      const datePrevReparation = document.getElementById('datePrevReparation').value;
+
+      // Vérification des champs obligatoires
+      if (!numDS || !numInterv || !dateDS || !lieu || !dateSouhaitee || !codeMat || !typeDS || !descriptionDS) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
+      }
+      // Si Réparation, vérifier les champs réparation
+      if (typeDS === 'Réparation' && (!causePanne || !naturePanne || !nomConducteur || !datePrevReparation)) {
+        alert('Veuillez remplir tous les champs de réparation.');
+        return;
+      }
+      const table = document.getElementById('demandesTable').getElementsByTagName('tbody')[0];
+      const newRow = table.insertRow();
+      newRow.innerHTML = `
+        <td>${table.rows.length + 1}</td>
+        <td>${numDS}</td>
+        <td>${numInterv}</td>
+        <td>${dateDS}</td>
+        <td>${lieu}</td>
+        <td>${dateSouhaitee}</td>
+        <td>${codeMat}</td>
+        <td>${typeDS}</td>
+        <td>${descriptionDS}</td>
+        <td>${typeDS === 'Réparation' ? causePanne : ''}</td>
+        <td>${typeDS === 'Réparation' ? naturePanne : ''}</td>
+        <td>${typeDS === 'Réparation' ? nomConducteur : ''}</td>
+        <td>${typeDS === 'Réparation' ? datePrevReparation : ''}</td>
+        <td><span class="statut-en-cours">En cours</span></td>
+        <td>
+          <button class="action-btn edit" onclick="editDemande(${table.rows.length})"><i class="fas fa-edit"></i></button>
+          <button class="action-btn delete" onclick="deleteDemande(${table.rows.length})"><i class="fas fa-trash"></i></button>
+        </td>
+      `;
+      closeDemandeModal();
+      // Reset all fields
+      document.getElementById('N° DS').value = '';
+      document.getElementById('N° Intervention').value = '';
+      document.getElementById('dateDS').value = '';
+      document.getElementById('lieu').value = '';
+      document.getElementById('dateSouhaitee').value = '';
+      document.getElementById('codeMat').value = '';
+      document.getElementById('typeDS').value = '';
+      document.getElementById('descriptionDS').value = '';
+      document.getElementById('causePanne').value = '';
+      document.getElementById('naturePanne').value = '';
+      document.getElementById('nomConducteur').value = '';
+      document.getElementById('datePrevReparation').value = '';
+      handleTypeDSChange();
+    }
+
+    function deleteDemande(rowNumber) {
+      if (confirm("Voulez-vous supprimer cette demande ?")) {
+        document.getElementById('demandesTable').deleteRow(rowNumber);
+      }
+    }
+    
+    function printDemandes() {
+      const printContents = document.getElementById('demandesTable').outerHTML;
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = 
+        `<h2 style="text-align:center;margin:20px">Liste des Demandes de Service</h2>
+        ${printContents}`;
+      window.print();
+      document.body.innerHTML = originalContents;
+      location.reload();
+    }
+
+    // Sous-menus sidebar
+    function toggleSubmenu(element) {
+      const parentLi = element.parentElement;
+      parentLi.classList.toggle('active');
+      Array.from(parentLi.parentElement.children).forEach(li => {
+        if (li !== parentLi) {
+          li.classList.remove('active');
+        }
+      });
+    }
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.sidebar-menu li')) {
+        document.querySelectorAll('.sidebar-menu li').forEach(li => {
+          li.classList.remove('active');
+        });
+      }
+    });
+  </script>
+
+  <style>
+    .modal {
+      display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100vw; height: 100vh;
+      overflow: auto; background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      background-color: #fff; margin: 10% auto; padding: 20px; border-radius: 15px;
+      width: 400px; box-shadow: 0 0 15px rgba(0,0,0,0.3); animation: fadeIn 0.3s;
+    }
+    .modal-content h3 { margin-top: 0; text-align: center; }
+    .modal-content label { display: block; margin-top: 10px; font-weight: bold; }
+    .modal-content input, .modal-content select, .modal-content textarea {
+      width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 8px;
+    }
+    .modal-buttons { display: flex; justify-content: space-between; margin-top: 20px; }
+    .modal-buttons button {
+      padding: 10px 20px; border: none; border-radius: 20px; cursor: pointer; font-weight: bold;
+    }
+    .modal-buttons .cancel-btn { background-color: #ccc; color: #333; }
+    .modal-buttons .save-btn { background-color: #f62323; color: white; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px);} to { opacity: 1; transform: translateY(0);} }
+  </style>
+
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Intervenants - Cosider</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+    }
+
+    .main-content.shifted {
+      margin-left: 0;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    .new-order-btn {
+      background-color: #f62323;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    .new-order-btn:hover {
+      background-color: #ef7d7d;
+      transform: translateY(-2px);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      background-color: rgb(219, 217, 217);
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    th {
+      background-color: #eb0000;
+      color: white;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      padding: 6px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+      background-color: #8b0000;
+      color: #fff;
+      width: 250px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      overflow-y: auto;
+      transition: left 0.3s ease;
+      z-index: 1000;
+    }
+
+    .sidebar.hidden {
+      left: -250px;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+    }
+
+    .sidebar-logo {
+      width: 120px;
+      height: auto;
+    }
+
+    .close-btn {
+      cursor: pointer;
+      font-size: 18px;
+      display: none;
+    }
+
+    .sidebar-menu {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar-menu li a {
+      display: block;
+      color: #fff;
+      padding: 10px 20px;
+      text-decoration: none;
+      transition: background-color 0.3s, padding-left 0.3s;
+    }
+
+    .sidebar-menu li a:hover {
+      background-color: #ff4d4d;
+      padding-left: 30px;
+    }
+
+    .submenu {
+      list-style-type: none;
+      padding: 0;
+      margin-left: 10px;
+    }
+
+    .submenu li a {
+      display: block;
+      padding: 8px 30px;
+      font-size: 14px;
+      color: #f0f0f0;
+      text-decoration: none;
+      transition: color 0.3s, padding-left 0.3s;
+    }
+
+    .submenu li a:hover {
+      color: #ffffff;
+      padding-left: 40px;
+    }
+
+    .menu-toggle {
+      background-color: #8b0000;
+      color: white;
+      border: none;
+      font-size: 18px;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+      display: none;
+      margin-bottom: 20px;
+    }
+
+    /* Responsive behavior */
+    @media (max-width: 768px) {
+      .sidebar {
+        left: -250px;
+      }
+
+      .sidebar.active {
+        left: 0;
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .main-content.shifted {
+        margin-left: 0;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .close-btn {
+        display: block;
+      }
+    }
+    /* Scrollable sidebar style */
+.sidebar {
+  height: 100vh;              /* Full height of the viewport */
+  overflow-y: auto;           /* Enable vertical scroll when content overflows */
+  overflow-x: hidden;         /* Optional: hide horizontal scroll */
+}
+
+  </style>
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="cosider2.png" alt="Logo Cosider" class="sidebar-logo" />
+    </div>
+
+    <div class="profile-dropdown">
+      <a class="profile-btn" href="profile.html">
+        <i class="fas fa-user-circle"></i> Profil
+      </a>
+    
+      <a href="profile.html"><i class="fas fa-user"></i> Mon Profil</a>
+      <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Accueil</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-bars"></i> Menu principale</a>
+        <ul class="submenu">
+          <li><a href="budjet.html">▫️ Budjet</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#"><i class="fa-solid fa-truck-pickup"></i> Matériels</a>
+        <ul class="submenu">
+          <li><a href="messagerie.html"><i class="fa-brands fa-rocketchat"></i> Messagerie</a></li>
+          <li><a href="ordredereparation.html"><i class="fa-solid fa-screwdriver-wrench"></i> Ordre de réparation</a></li>
+          <li><a href="listordres.html"><i class="fa-solid fa-list-check"></i> Liste des Ordres de Réparation</a></li>
+          <li><a href="listemateriels.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des Matériels</a></li>
+          <li><a href="listemarques.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des Marques </a></li>
+          <li><a href="demandessercice.html"><i class="fa-solid fa-screwdriver-wrench"></i> Demande de Service</a></li>
+          <li><a href="internenvants.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des intervenants</a></li>
+          <li><a href="structures.html">▫️ Structure</a></li>
+          <li><a href="nt.html">▫️ NT</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#"><i class="fa-solid fa-sliders"></i> Parametre</a>
+        <ul class="submenu">
+          <li>
+            <a href="#"><i class="fa-solid fa-street-view"></i> Direction</a>
+            <ul class="submenu">
+              <li><a href="#">▫️ Equipement</a></li>
+              <li><a href="#">▫️ Gamme</a></li>
+              <li><a href="#">▫️ Intervention</a></li>
+            </ul>
+          </li>
+          <li><a href="#"><i class="fa-brands fa-ubuntu"></i> Operation</a></li>
+          <li><a href="#"><i class="fa-solid fa-cube"></i> PDR</a></li>
+          <li><a href="demandessercice.html"><i class="fa-solid fa-cube"></i> Demande de Service</a></li>
+          <li><a href="#"><i class="fa-solid fa-file-invoice"></i> Document d'acompagnement</a></li>
+        </ul>
+      </li>
+    </ul>
+  </aside>
+
+  <div class="main-content" id="main-content">
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+    <h2>Intervenants</h2>
+    <button class="new-order-btn" onclick="addIntervenantRow()" style="margin-bottom: 10px;">➕ Ajouter un intervenant</button>
+    <table id="intervenantsTable">
+      <thead>
+        <tr>
+          <th>Intervenants</th>
+          <th>Durée INT</th>
+          <th>Date début</th>
+          <th>Date fin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamic rows go here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function addIntervenantRow() {
+      const tbody = document.querySelector('#intervenantsTable tbody');
+      const row = document.createElement('tr');
+
+      const cell1 = document.createElement('td');
+      cell1.contentEditable = true;
+      cell1.textContent = '-';
+      row.appendChild(cell1);
+
+      const cell2 = document.createElement('td');
+      cell2.contentEditable = true;
+      cell2.textContent = '-';
+      row.appendChild(cell2);
+
+      const cell3 = document.createElement('td');
+      const dateStart = document.createElement('input');
+      dateStart.type = 'date';
+      dateStart.style.width = '100%';
+      cell3.appendChild(dateStart);
+      row.appendChild(cell3);
+
+      const cell4 = document.createElement('td');
+      const dateEnd = document.createElement('input');
+      dateEnd.type = 'date';
+      dateEnd.style.width = '100%';
+      cell4.appendChild(dateEnd);
+      row.appendChild(cell4);
+
+      tbody.appendChild(row);
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const mainContent = document.getElementById("main-content");
+
+      sidebar.classList.toggle("active");
+      mainContent.classList.toggle("shifted");
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ordre de Réparation - Cosider</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+  <style>
+    .submenu { display: none; list-style: none; padding-left: 20px; }
+    .sidebar-menu li:hover .submenu { display: block; }
+    .submenu li a { font-size: 14px; padding-left: 10px; display: block; }
+    .new-order-btn {
+      background-color: #f62323; color: white; padding: 10px 20px; border: none;
+      border-radius: 20px; cursor: pointer; font-weight: bold; transition: all 0.3s;
+    }
+    .new-order-btn:hover { background-color: #ef7d7d; transform: translateY(-2px); }
+    .ordre-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .modal {
+      display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+      overflow: auto; background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      background-color: #fff; margin: 10% auto; padding: 20px; border-radius: 15px;
+      width: 400px; box-shadow: 0 0 15px rgba(0,0,0,0.3); animation: fadeIn 0.3s;
+    }
+    .modal-content h3 { margin-top: 0; text-align: center; }
+    .modal-content label { display: block; margin-top: 10px; font-weight: bold; }
+    .modal-content input, .modal-content select {
+      width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 8px;
+    }
+    .modal-buttons { display: flex; justify-content: space-between; margin-top: 20px; }
+    .modal-buttons button {
+      padding: 10px 20px; border: none; border-radius: 20px; cursor: pointer; font-weight: bold;
+    }
+    .modal-buttons .cancel-btn { background-color: #ccc; color: #333; }
+    .modal-buttons .save-btn { background-color: #f62323; color: white; }
+    #pdrFields { display: none; margin-top: 15px; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px);} to { opacity: 1; transform: translateY(0);} }
+
+    .sidebar {
+      transition: transform 0.3s ease;
+    }
+    .sidebar.hidden {
+      transform: translateX(-100%);
+    }
+
+    .page-split-container {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 120px);
+    }
+    .top-section {
+      padding: 10px;
+    }
+    .bottom-section {
+      flex: 1;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border-top: 2px solid #ccc;
+      overflow-y: auto;
+    }
+    /* Scrollable sidebar style */
+.sidebar {
+  height: 100vh;              /* Full height of the viewport */
+  overflow-y: auto;           /* Enable vertical scroll when content overflows */
+  overflow-x: hidden;         /* Optional: hide horizontal scroll */
+}
+
+  </style>
+</head>
+<body class="light-mode">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="cosider2.png" alt="Logo Cosider" class="sidebar-logo" />
+    </div>
+
+    <div class="profile-dropdown">
+      <a class="profile-btn" href="profile.html">
+        <i class="fas fa-user-circle"></i> Profil
+      </a>
+    
+      <a href="profile.html"><i class="fas fa-user"></i> Mon Profil</a>
+      <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Accueil</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-bars"></i> Menu principale</a>
+        <ul class="submenu">
+          <li><a href="budjet.html">▫️ Budjet</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#"><i class="fa-solid fa-truck-pickup"></i> Matériels</a>
+        <ul class="submenu">
+          <li><a href="messagerie.html"><i class="fa-brands fa-rocketchat"></i> Messagerie</a></li>
+          <li><a href="ordredereparation.html"><i class="fa-solid fa-screwdriver-wrench"></i> Ordre de réparation</a></li>
+          <li><a href="listordres.html"><i class="fa-solid fa-list-check"></i> Liste des Ordres de Réparation</a></li>
+          <li><a href="listemateriels.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des Matériels</a></li>
+          <li><a href="listemarques.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des Marques </a></li>
+          <li><a href="demandessercice.html"><i class="fa-solid fa-screwdriver-wrench"></i> Demande de Service</a></li>
+          <li><a href="internenvants.html"><i class="fa-solid fa-screwdriver-wrench"></i> Liste des intervenants</a></li>
+          <li><a href="structures.html">▫️ Structure</a></li>
+          <li><a href="nt.html">▫️ NT</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#"><i class="fa-solid fa-sliders"></i> Parametre</a>
+        <ul class="submenu">
+          <li>
+            <a href="#"><i class="fa-solid fa-street-view"></i> Direction</a>
+            <ul class="submenu">
+              <li><a href="#">▫️ Equipement</a></li>
+              <li><a href="#">▫️ Gamme</a></li>
+              <li><a href="#">▫️ Intervention</a></li>
+            </ul>
+          </li>
+          <li><a href="#"><i class="fa-brands fa-ubuntu"></i> Operation</a></li>
+          <li><a href="#"><i class="fa-solid fa-cube"></i> PDR</a></li>
+          <li><a href="demandessercice.html"><i class="fa-solid fa-cube"></i> Demande de Service</a></li>
+          <li><a href="#"><i class="fa-solid fa-file-invoice"></i> Document d'acompagnement</a></li>
+        </ul>
+      </li>
+    </ul>
+  </aside>
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <h1>Ordre de Réparation</h1>
+      <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</button>
+    </div>
+    <div class="ordre-header">
+      <h2>Liste des ordres de réparation</h2>
+      <button class="new-order-btn" onclick="openModal()">➕ Nouveaux Ordre</button>
+    </div>
+
+    <div class="page-split-container">
+      <div class="top-section">
+        <div id="ordersTable"></div>
+      </div>
+      <div class="bottom-section">
+        <!-- Intervenants section has been removed -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="orderModal" class="modal">
+    <div class="modal-content">
+      <h3>Nouvel Ordre de Réparation</h3>
+      <label for="numOR">N° OR</label>
+      <input type="text" id="numOR" placeholder="Ex: OR-2025-001">
+      <label for="dateOR">Date OR</label>
+      <input type="date" id="dateOR">
+      <label for="numDS">N° DS</label>
+      <input type="text" id="numDS" placeholder="Ex: DS-2025-123">
+      <label for="dateDS">Date DS</label>
+      <input type="date" id="dateDS">
+      <label for="structure">Structure</label>
+      <input type="text" id="structure" placeholder="Ex: Direction Alger Est">
+      <label for="codeMateriel">Code Matériel</label>
+      <input type="text" id="codeMateriel" placeholder="Ex: CM-4567">
+      <label for="typeOR">Type</label>
+      <select id="typeOR">
+        <option value="">-- Sélectionner --</option>
+        <option value="Préventive">Préventive</option>
+        <option value="Corrective">Corrective</option>
+        <option value="Curative">Curative</option>
+      </select>
+
+      <button type="button" id="pdrBtn" class="save-btn" style="width: 100%; margin-top: 15px;">PDR</button>
+      <div id="pdrFields">
+        <label for="qte">QTE</label>
+        <input type="number" id="qte" placeholder="Quantité">
+        <label for="pu">PU</label>
+        <input type="number" id="pu" placeholder="Prix Unitaire">
+      </div>
+
+      <div class="modal-buttons">
+        <button class="cancel-btn" onclick="closeModal()">Annuler</button>
+        <button class="save-btn" onclick="saveOrder()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById("sidebar").classList.toggle("active");
+    }
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+    function openModal() {
+      document.getElementById('orderModal').style.display = 'block';
+    }
+    function closeModal() {
+      document.getElementById('orderModal').style.display = 'none';
+    }
+    window.onclick = function(event) {
+      const modal = document.getElementById('orderModal');
+      if (event.target == modal) closeModal();
+    }
+    document.getElementById('pdrBtn').addEventListener('click', function() {
+      const pdrFields = document.getElementById('pdrFields');
+      pdrFields.style.display = (pdrFields.style.display === 'none' || pdrFields.style.display === '') ? 'block' : 'none';
+    });
+
+    function saveOrder() {
+      const numOR = document.getElementById('numOR').value;
+      const dateOR = document.getElementById('dateOR').value;
+      const numDS = document.getElementById('numDS').value;
+      const dateDS = document.getElementById('dateDS').value;
+      const structure = document.getElementById('structure').value;
+      const codeMateriel = document.getElementById('codeMateriel').value;
+      const typeOR = document.getElementById('typeOR').value;
+      const qte = document.getElementById('qte').value || "-";
+      const pu = document.getElementById('pu').value || "-";
+
+      const tableDiv = document.getElementById('ordersTable');
+      if (!document.getElementById('ordersTableTable')) {
+        tableDiv.innerHTML = ` 
+          <table id="ordersTableTable" border="1" style="width:100%; text-align:center; border-collapse:collapse;">
+            <tr>
+              <th>N° OR</th><th>Date OR</th><th>N° DS</th><th>Date DS</th>
+              <th>Structure</th><th>Code Matériel</th><th>Type</th><th>QTE</th><th>PU</th>
+            </tr>
+          </table>
+        `;
+      }
+
+      const table = document.getElementById('ordersTableTable');
+      const row = table.insertRow(-1);
+      row.innerHTML = `
+        <td>${numOR}</td>
+        <td>${dateOR}</td>
+        <td>${numDS}</td>
+        <td>${dateDS}</td>
+        <td>${structure}</td>
+        <td>${codeMateriel}</td>
+        <td>${typeOR}</td>
+        <td>${qte}</td>
+        <td>${pu}</td>
+      `;
+      closeModal();
+    }
+  </script>
+</body>
+</html>
