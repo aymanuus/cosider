@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Structures</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100%;
+      background-color: #6d1818;
+      color: white;
+      transition: transform 0.4s ease;
+      z-index: 1000;
+    }
+    .sidebar-menu li ul.submenu {
+      display: none;
+      list-style: none;
+      padding-left: 20px;
+    }
+    .sidebar-menu li:hover ul.submenu {
+      display: block;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-250px);
+    }
+
+    .menu-toggle {
+      position: absolute;
+      top: 20px;
+      left: 260px;
+      background-color: white;
+      color: #b91c1c;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 15px;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: left 0.4s ease;
+      z-index: 1100;
+    }
+
+    .sidebar.collapsed + .menu-toggle {
+      left: 10px;
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+      transition: margin-left 0.4s ease;
+    }
+
+    .sidebar.collapsed ~ .main-content {
+      margin-left: 0;
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .sidebar-logo {
+      max-width: 120px;
+      height: auto;
+    }
+
+    .close-btn {
+      font-size: 24px;
+      cursor: pointer;
+      background-color: white;
+      color: #b91c1c;
+      padding: 5px 10px;
+      border-radius: 8px;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar-menu li {
+      padding: 15px 20px;
+    }
+
+    .sidebar-menu li a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-menu li a:hover {
+      background-color: #a31515;
+      border-radius: 8px;
+      display: block;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      text-align: left;
+      margin-left: 150px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #ff0000;
+      color: white;
+    }
+
+    .add-structure-btn {
+      background-color: #6d1818; /* Couleur de la sidebar */
+      color: white;
+      border: none;
+      padding: 15px 30px; /* Augmenter le rembourrage */
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 18px; /* Augmenter la taille de la police */
+      margin-bottom: 20px;
+    }
+
+    .add-structure-btn:hover {
+      background-color: #5a1414; /* Couleur plus foncée au survol */
+    }
+
+    .form-container {
+      display: none; /* Masqué par défaut */
+      margin-top: 20px;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn-cancel {
+      background: #f5f5f5;
+      color: #333;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      background: #b71c1c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="cosider2.png" alt="Logo Cosider" class="sidebar-logo" />
+      <span class="close-btn" onclick="toggleSidebar()">✖</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Accueil</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-bars"></i> Menu principale</a>
+        <ul class="submenu">
+          <li><a href="budjet.html">▫️ Budjet</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#"><i class="fa-solid fa-truck-pickup"></i> Matériels</a>
+        <ul class="submenu">
+          <li><a href="listemateriels.html">▫️ Liste Matériels</a></li>
+          <li><a href="listemarques.html">▫️ Liste Marques</a></li>
+          <li><a href="#">▫️ Structure</a></li>
+          <li><a href="#">▫️ NT</a></li>
+        </ul>
+      </li>
+      <li><a href="messagerie.html"><i class="fa-brands fa-rocketchat"></i> Messagerie</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-sliders"></i> Parametre</a>
+        <ul class="submenu">
+          <li>
+            <a href="#"><i class="fa-solid fa-street-view"></i> Direction</a>
+            <ul class="submenu">
+              <li><a href="#">▫️ Equipement</a></li>
+              <li><a href="#">▫️ Gamme</a></li>
+              <li><a href="#">▫️ Intervention</a></li>
+            </ul>
+          </li>
+          <li><a href="#"><i class="fa-brands fa-ubuntu"></i> Operation</a></li>
+          <li><a href="#"><i class="fa-solid fa-cube"></i> PDR</a></li>
+          <li><a href="structures.html"><i class="fa-solid fa-building"></i> Gestion des Structures</a></li>
+        </ul>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Menu Toggle Button -->
+  <button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">☰</button>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <h1>GESTION DES STRUCTURES</h1>
+
+    <button class="add-structure-btn" onclick="showAddStructureForm()">Ajouter une Structure</button>
+
+    <div class="form-container" id="addStructureForm">
+      <h2>Ajouter une Nouvelle Structure</h2>
+      <form id="structureForm">
+        <div class="form-group">
+          <label for="codeStructure">Code Structure:</label>
+          <input type="text" id="codeStructure" required>
+        </div>
+        <div class="form-group">
+          <label for="nomStructure">Nom Structure:</label>
+          <input type="text" id="nomStructure" required>
+        </div>
+        <div class="form-group">
+          <label for="typeStructure">Type Structure:</label>
+          <select id="typeStructure" required>
+            <option value="">Sélectionner...</option>
+            <option value="Direction">Direction</option>
+            <option value="Unité">Unité</option>
+            <option value="Chantier">Chantier</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="dateOuverture">Date Ouverture:</label>
+          <input type="date" id="dateOuverture" required>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" onclick="hideAddStructureForm()">Annuler</button>
+          <button type="submit" class="btn-submit">Ajouter</button>
+        </div>
+      </form>
+    </div>
+
+    <table id="structuresTable">
+      <thead>
+        <tr>
+          <th>Code Structure</th>
+          <th>Nom Structure</th>
+          <th>Type Structure</th>
+          <th>Date Ouverture</th>
+          <th>État de la Structure</th> <!-- Nouvelle colonne ajoutée -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>STR-001</td>
+          <td>Direction Générale</td>
+          <td>Direction</td>
+          <td>2020-01-15</td>
+          <td>
+            <select onchange="updateState(this)">
+              <option value="Terminé">Terminé</option>
+              <option value="En Cours">En Cours</option>
+            </select>
+          </td> <!-- État de la structure modifiable -->
+        </tr>
+        <tr>
+          <td>STR-002</td>
+          <td>Unité de Production</td>
+          <td>Unité</td>
+          <td>2019-05-20</td>
+          <td>
+            <select onchange="updateState(this)">
+              <option value="Terminé">Terminé</option>
+              <option value="En Cours">En Cours</option>
+            </select>
+          </td> <!-- État de la structure modifiable -->
+        </tr>
+        <tr>
+          <td>STR-003</td>
+          <td>Chantier Oued Smar</td>
+          <td>Chantier</td>
+          <td>2021-03-10</td>
+          <td>
+            <select onchange="updateState(this)">
+              <option value="Terminé">Terminé</option>
+              <option value="En Cours">En Cours</option>
+            </select>
+          </td> <!-- État de la structure modifiable -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      sidebar.classList.toggle("collapsed");
+    }
+
+    function showAddStructureForm() {
+      document.getElementById('addStructureForm').style.display = 'block';
+    }
+
+    function hideAddStructureForm() {
+      document.getElementById('addStructureForm').style.display = 'none';
+    }
+
+    document.getElementById('structureForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const codeStructure = document.getElementById('codeStructure').value;
+      const nomStructure = document.getElementById('nomStructure').value;
+      const typeStructure = document.getElementById('typeStructure').value;
+      const dateOuverture = document.getElementById('dateOuverture').value;
+
+      const table = document.getElementById('structuresTable').getElementsByTagName('tbody')[0];
+      const newRow = table.insertRow();
+
+      newRow.innerHTML = `
+        <td>${codeStructure}</td>
+        <td>${nomStructure}</td>
+        <td>${typeStructure}</td>
+        <td>${dateOuverture}</td>
+        <td>
+          <select onchange="updateState(this)">
+            <option value="Terminé">Terminé</option>
+            <option value="En Cours">En Cours</option>
+          </select>
+        </td> <!-- État par défaut -->
+      `;
+
+      alert('Structure ajoutée avec succès!');
+      hideAddStructureForm();
+      document.getElementById('structureForm').reset();
+    });
+
+    function updateState(selectElement) {
+      const selectedValue = selectElement.value;
+      alert(`État de la structure mis à jour : ${selectedValue}`);
+    }
+  </script>
+
+</body>
+</html>

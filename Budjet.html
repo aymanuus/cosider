@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Budjet</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100%;
+      background-color: #6d1818;
+      color: white;
+      transition: transform 0.4s ease;
+      z-index: 1000;
+    }
+    .sidebar-menu li ul.submenu {
+      display: none;
+      list-style: none;
+      padding-left: 20px;
+    }
+    .sidebar-menu li:hover ul.submenu {
+      display: block;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-250px);
+    }
+
+    .menu-toggle {
+      position: absolute;
+      top: 20px;
+      left: 260px;
+      background-color: white;
+      color: #b91c1c;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 15px;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: left 0.4s ease;
+      z-index: 1100;
+    }
+
+    .sidebar.collapsed + .menu-toggle {
+      left: 10px;
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+      transition: margin-left 0.4s ease;
+    }
+
+    .sidebar.collapsed ~ .main-content {
+      margin-left: 0;
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .sidebar-logo {
+      max-width: 120px;
+      height: auto;
+    }
+
+    .close-btn {
+      font-size: 24px;
+      cursor: pointer;
+      background-color: white;
+      color: #b91c1c;
+      padding: 5px 10px;
+      border-radius: 8px;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar-menu li {
+      padding: 15px 20px;
+    }
+
+    .sidebar-menu li a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-menu li a:hover {
+      background-color: #a31515;
+      border-radius: 8px;
+      display: block;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      text-align: left;
+      margin-left: 150px;
+    }
+
+    .nouveaux-btn {
+      background-color: #ff0000;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .nouveaux-btn:hover {
+      background-color: #e60000;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #ff0000;
+      color: white;
+    }
+
+    input[type="text"] {
+      padding: 5px;
+      width: 100px;
+      box-sizing: border-box;
+    }
+
+    .delete-btn {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .delete-btn:hover {
+      background-color: #da190b;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+
+</head>
+<body>
+
+  <!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="cosider2.png" alt="Logo Cosider" class="sidebar-logo" />
+      <span class="close-btn" onclick="toggleSidebar()">✖</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Accueil</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-bars"></i> Menu principale</a>
+        <ul class="submenu">
+          <li><a href="budjet.html">▫️ Budjet</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#"><i class="fa-solid fa-truck-pickup"></i> Matériels</a>
+        <ul class="submenu">
+          <li><a href="listemateriels.html">▫️ Liste Matériels</a></li>
+          <li><a href="listemarques.html">▫️ Liste Marques</a></li>
+          <li><a href="#">▫️ Structure</a></li>
+          <li><a href="#">▫️ NT</a></li>
+        </ul>
+      </li>
+      <li><a href="messagerie.html"><i class="fa-brands fa-rocketchat"></i> Messagerie</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-sliders"></i> Parametre</a>
+        <ul class="submenu">
+          <li>
+            <a href="#"><i class="fa-solid fa-street-view"></i> Direction</a>
+            <ul class="submenu">
+              <li><a href="#">▫️ Equipement</a></li>
+              <li><a href="#">▫️ Gamme</a></li>
+              <li><a href="#">▫️ Intervention</a></li>
+            </ul>
+          </li>
+          <li><a href="#"><i class="fa-brands fa-ubuntu"></i> Operation</a></li>
+          <li><a href="#"><i class="fa-solid fa-cube"></i> PDR</a></li>
+          <li><a href="structures.html"><i class="fa-solid fa-building"></i> Gestion des Structures</a></li> <!-- Ajouté ici -->
+        </ul>
+      </li>
+    </ul>
+</aside>
+
+
+
+  <!-- Menu Toggle Button -->
+  <button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">☰</button>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <h1>BUDJET</h1>
+
+    <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+      <input type="text" id="exerciceInput" placeholder="Exercice">
+      <input type="text" id="ntInput" placeholder="NT">
+      <input type="text" id="typeMatInput" placeholder="Type Matériel">
+      <input type="text" id="typeLocInput" placeholder="Type Location">
+      <button class="nouveaux-btn" onclick="addBudjetRow()">➕ Ajouter</button>
+      <button class="nouveaux-btn" onclick="goToConsultPage()">📄 Consulter</button>
+    </div>
+
+    <table id="budjetTable">
+      <thead>
+        <tr>
+          <th>NT</th>
+          <th>Type Matériel</th>
+          <th>Type Location</th>
+          <th>Jan</th>
+          <th>Fev</th>
+          <th>Mar</th>
+          <th>Avr</th>
+          <th>Mai</th>
+          <th>Juin</th>
+          <th>Juil</th>
+          <th>Août</th>
+          <th>Sept</th>
+          <th>Oct</th>
+          <th>Nov</th>
+          <th>Déc</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamic rows -->
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    let budjetData = [];
+    
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      sidebar.classList.toggle("collapsed");
+    }
+    
+    function addBudjetRow() {
+      const exercice = document.getElementById("exerciceInput").value.trim();
+      const nt = document.getElementById("ntInput").value.trim();
+      const typeMat = document.getElementById("typeMatInput").value.trim();
+      const typeLoc = document.getElementById("typeLocInput").value.trim();
+    
+      const newRowData = {
+        nt: nt,
+        typeMat: typeMat,
+        typeLoc: typeLoc,
+        months: Array(12).fill("")
+      };
+    
+      budjetData.push(newRowData);
+      renderTable();
+      saveBudjetData();
+    
+      // Clear inputs
+      document.getElementById("exerciceInput").value = '';
+      document.getElementById("ntInput").value = '';
+      document.getElementById("typeMatInput").value = '';
+      document.getElementById("typeLocInput").value = '';
+    }
+    
+    function renderTable() {
+      const tbody = document.getElementById("budjetTable").getElementsByTagName("tbody")[0];
+      tbody.innerHTML = "";
+    
+      budjetData.forEach((rowData, index) => {
+        const newRow = tbody.insertRow();
+    
+        newRow.insertCell().textContent = rowData.nt;
+        newRow.insertCell().textContent = rowData.typeMat;
+        newRow.insertCell().textContent = rowData.typeLoc;
+    
+        rowData.months.forEach((quantity, monthIndex) => {
+          const cell = newRow.insertCell();
+          const input = document.createElement("input");
+          input.type = "text";
+          input.value = quantity;
+          input.placeholder = "Qté";
+          input.style.width = "60px";
+          input.oninput = (e) => {
+            budjetData[index].months[monthIndex] = e.target.value;
+            saveBudjetData();
+          };
+          cell.appendChild(input);
+        });
+    
+        const actionCell = newRow.insertCell();
+        const deleteButton = document.createElement("button");
+        deleteButton.innerText = "Supprimer";
+        deleteButton.className = "delete-btn";
+        deleteButton.onclick = function () {
+          deleteRow(index);
+        };
+        actionCell.appendChild(deleteButton);
+      });
+    }
+    
+    function deleteRow(index) {
+      budjetData.splice(index, 1);
+      renderTable();
+      saveBudjetData();
+    }
+    
+    function saveBudjetData() {
+      localStorage.setItem("budjetData", JSON.stringify(budjetData));
+    }
+    
+    function loadBudjetData() {
+      const savedData = localStorage.getItem("budjetData");
+      if (savedData) {
+        budjetData = JSON.parse(savedData);
+        renderTable();
+      }
+    }
+    
+    function goToConsultPage() {
+      saveBudjetData(); // just to make sure
+      window.location.href = "consultation.html";
+    }
+    
+    // When page loads
+    loadBudjetData();
+    </script>
+    
+
+</body>
+</html>

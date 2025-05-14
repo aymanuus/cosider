@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Marques - Direction Centrale | Cosider</title>
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">  
+  <link rel="stylesheet" href="listemateriels.css">
+  
+
+  
+</head>
+
+<body class="light-mode">
+
+  <!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="cosider2.png" alt="Logo Cosider" class="sidebar-logo" />
+      <span class="close-btn" onclick="toggleSidebar()">✖</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Accueil</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-bars"></i> Menu principale</a>
+        <ul class="submenu">
+          <li><a href="budjet.html">▫️ Budjet</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#"><i class="fa-solid fa-truck-pickup"></i> Matériels</a>
+        <ul class="submenu">
+          <li><a href="listemateriels.html">▫️ Liste Matériels</a></li>
+          <li><a href="listemarques.html">▫️ Liste Marques</a></li>
+          <li><a href="#">▫️ Structure</a></li>
+          <li><a href="#">▫️ NT</a></li>
+        </ul>
+      </li>
+      <li><a href="messagerie.html"><i class="fa-brands fa-rocketchat"></i> Messagerie</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-sliders"></i> Parametre</a>
+        <ul class="submenu">
+          <li>
+            <a href="#"><i class="fa-solid fa-street-view"></i> Direction</a>
+            <ul class="submenu">
+              <li><a href="#">▫️ Equipement</a></li>
+              <li><a href="#">▫️ Gamme</a></li>
+              <li><a href="#">▫️ Intervention</a></li>
+            </ul>
+          </li>
+          <li><a href="#"><i class="fa-brands fa-ubuntu"></i> Operation</a></li>
+          <li><a href="#"><i class="fa-solid fa-cube"></i> PDR</a></li>
+          <li><a href="structures.html"><i class="fa-solid fa-building"></i> Gestion des Structures</a></li> <!-- Ajouté ici -->
+        </ul>
+      </li>
+    </ul>
+</aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <h1>Gestion des Marques - Cosider</h1>
+      <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</button>
+    </div>
+
+    <div class="action-bar">
+      <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchMarque" placeholder="Rechercher une marque..." onkeyup="searchMarques()">
+      </div>
+      <div class="action-buttons">
+        <button class="action-btn export-btn" onclick="exportMarquesToExcel()">
+          <i class="fas fa-file-export"></i>
+          <span>Exporter</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Formulaire d'ajout -->
+    <div id="addMarqueForm" class="add-form-container" style="display:none;">
+      <div class="form-header">
+        <h3 id="formTitle"><i class="fas fa-plus-circle"></i> Ajouter une marque</h3>
+        <button class="close-btn" onclick="hideAddMarqueForm()"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="marqueForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="codeMarque">Code Marque (2 lettres):</label>
+            <input type="text" id="codeMarque" maxlength="2" pattern="[A-Z]{2}" title="2 lettres majuscules" required>
+          </div>
+          <div class="form-group">
+            <label for="designation">Désignation:</label>
+            <input type="text" id="designation" required>
+          </div>
+          <div class="form-group">
+            <label for="nationalite">Nationalité:</label>
+            <select id="nationalite" required>
+              <option value="">Sélectionner...</option>
+              <option value="Algérie">Algérie</option>
+              <option value="Allemagne">Allemagne</option>
+              <option value="Chine">Chine</option>
+              <option value="Espagne">Espagne</option>
+              <option value="France">France</option>
+              <option value="Italie">Italie</option>
+              <option value="Japon">Japon</option>
+              <option value="USA">USA</option>
+              <option value="Suède">Suède</option>
+              <option value="Turquie">Turquie</option>
+              <option value="Autre">Autre</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" onclick="hideAddMarqueForm()">Annuler</button>
+          <button type="submit" class="btn-submit" id="submitButtonText">Ajouter</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tableau -->
+    <div class="table-container">
+      <table id="marquesTable">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="selectAll" onclick="toggleAllCheckboxes(this)"></th>
+            <th>Code</th>
+            <th>Désignation</th>
+            <th>Nationalité</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox" class="rowCheckbox" data-code="LB"></td>
+            <td>LB</td>
+            <td>Liebherr</td>
+            <td>Allemagne</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="rowCheckbox" data-code="CT"></td>
+            <td>CT</td>
+            <td>Caterpillar</td>
+            <td>USA</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    let editingCode = null;
+
+    function toggleSidebar() {
+      document.getElementById("sidebar").classList.toggle("active");
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+
+    function showAddMarqueForm(isEdit = false) {
+      document.getElementById('addMarqueForm').style.display = 'block';
+      document.getElementById('marqueForm').reset();
+      if (!isEdit) editingCode = null;
+
+      document.getElementById('formTitle').innerHTML = isEdit
+        ? `<i class="fas fa-edit"></i> Modifier la marque`
+        : `<i class="fas fa-plus-circle"></i> Ajouter une marque`;
+
+      document.getElementById('submitButtonText').textContent = isEdit ? 'Modifier' : 'Ajouter';
+    }
+
+    function hideAddMarqueForm() {
+      document.getElementById('addMarqueForm').style.display = 'none';
+    }
+
+    function editMarque(code) {
+      const rows = document.querySelectorAll("#marquesTable tbody tr");
+      rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        if (cells[1].textContent === code) {
+          document.getElementById('codeMarque').value = cells[1].textContent;
+          document.getElementById('designation').value = cells[2].textContent;
+          document.getElementById('nationalite').value = cells[3].textContent;
+          editingCode = code;
+          showAddMarqueForm(true);
+        }
+      });
+    }
+
+    function editSelectedMarque() {
+      const selected = getSelectedCodes();
+      if (selected.length === 0) {
+        alert("Veuillez sélectionner une marque à modifier.");
+      } else if (selected.length > 1) {
+        alert("Veuillez sélectionner une seule marque à modifier.");
+      } else {
+        editMarque(selected[0]);
+      }
+    }
+
+    function deleteSelectedMarques() {
+      const selected = getSelectedCodes();
+      if (selected.length === 0) {
+        alert("Veuillez sélectionner au moins une marque à supprimer.");
+        return;
+      }
+
+      if (confirm(`Voulez-vous supprimer les marques suivantes ?\n${selected.join(', ')}`)) {
+        selected.forEach(code => {
+          const rows = document.querySelectorAll("#marquesTable tbody tr");
+          rows.forEach(row => {
+            if (row.querySelector(`.rowCheckbox[data-code="${code}"]`)) {
+              row.remove();
+            }
+          });
+        });
+      }
+    }
+
+    function getSelectedCodes() {
+      return Array.from(document.querySelectorAll('.rowCheckbox:checked')).map(cb => cb.getAttribute('data-code'));
+    }
+
+    function toggleAllCheckboxes(source) {
+      document.querySelectorAll('.rowCheckbox').forEach(cb => cb.checked = source.checked);
+    }
+
+    document.getElementById('marqueForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const code = document.getElementById('codeMarque').value.toUpperCase();
+      const designation = document.getElementById('designation').value;
+      const nationalite = document.getElementById('nationalite').value;
+
+      if (!/^[A-Z]{2}$/.test(code)) {
+        alert("Le code doit être exactement 2 lettres majuscules.");
+        return;
+      }
+
+      if (editingCode) {
+        const rows = document.querySelectorAll("#marquesTable tbody tr");
+        rows.forEach(row => {
+          const cells = row.querySelectorAll("td");
+          if (cells[1].textContent === editingCode) {
+            cells[1].textContent = code;
+            cells[2].textContent = designation;
+            cells[3].textContent = nationalite;
+            row.querySelector('.rowCheckbox').setAttribute('data-code', code);
+          }
+        });
+        alert(`Marque ${code} modifiée.`);
+      } else {
+        const tbody = document.querySelector("#marquesTable tbody");
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+          <td><input type="checkbox" class="rowCheckbox" data-code="${code}"></td>
+          <td>${code}</td>
+          <td>${designation}</td>
+          <td>${nationalite}</td>
+        `;
+        tbody.appendChild(newRow);
+        alert(`Marque ${code} ajoutée.`);
+      }
+
+      hideAddMarqueForm();
+    });
+
+    function searchMarques() {
+      const input = document.getElementById('searchMarque').value.toUpperCase();
+      const rows = document.querySelectorAll("#marquesTable tbody tr");
+      rows.forEach(row => {
+        const text = row.textContent.toUpperCase();
+        row.style.display = text.includes(input) ? "" : "none";
+      });
+    }
+
+    function exportMarquesToExcel() {
+      alert("Export Excel des marques (simulation)");
+    }
+
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+  </script>
+
+</body>
+</html>
+
+
+
+

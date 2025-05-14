@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Messagerie - Cosider</title>
+  <link rel="stylesheet" href="messagerie.css" />
+  <style>
+    .submenu {
+      display: none;
+      list-style: none;
+      padding-left: 15px;
+    }
+    .sidebar-menu li:hover > .submenu {
+      display: block;
+    }
+  </style>
+</head>
+<body class="light-mode">
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="cosider2.png" alt="Logo Cosider" class="sidebar-logo" />
+      <span class="close-btn" onclick="toggleSidebar()">✖</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Accueil</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-bars"></i> Menu principale</a>
+        <ul class="submenu">
+          <li><a href="budjet.html">▫️ Budjet</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#"><i class="fa-solid fa-truck-pickup"></i> Matériels</a>
+        <ul class="submenu">
+          <li><a href="listemateriels.html">▫️ Liste Matériels</a></li>
+          <li><a href="listemarques.html">▫️ Liste Marques</a></li>
+          <li><a href="#">▫️ Structure</a></li>
+          <li><a href="#">▫️ NT</a></li>
+        </ul>
+      </li>
+      <li><a href="messagerie.html"><i class="fa-brands fa-rocketchat"></i> Messagerie</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-sliders"></i> Parametre</a>
+        <ul class="submenu">
+          <li>
+            <a href="#"><i class="fa-solid fa-street-view"></i> Direction</a>
+            <ul class="submenu">
+              <li><a href="#">▫️ Equipement</a></li>
+              <li><a href="#">▫️ Gamme</a></li>
+              <li><a href="#">▫️ Intervention</a></li>
+            </ul>
+          </li>
+          <li><a href="#"><i class="fa-brands fa-ubuntu"></i> Operation</a></li>
+          <li><a href="#"><i class="fa-solid fa-cube"></i> PDR</a></li>
+          <li><a href="structures.html"><i class="fa-solid fa-building"></i> Gestion des Structures</a></li> <!-- Ajouté ici -->
+        </ul>
+      </li>
+    </ul>
+</aside>
+
+<!-- Main Content -->
+<div class="main-content">
+  <div class="topbar">
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+    <h2>Messagerie</h2>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</button>
+  </div>
+
+  <div class="messagerie-container">
+    <!-- Contacts -->
+    <div class="sidebar-contacts">
+      <h3>Contacts</h3>
+      <ul>
+        <li onclick="showConversation('direction')">📁 DIRECTION</li>
+        <li onclick="showConversation('client')">🏢 AADL</li>
+        <li onclick="showConversation('supplier')">📦 MAGASIN</li>
+        <li onclick="showConversation('hr')">📄 DCM</li>
+      </ul>
+    </div>
+
+    <!-- Chat Window -->
+    <div class="chat-window">
+      <div class="chat-header">
+        <h3 id="contactName">Sélectionnez un contact</h3>
+      </div>
+      <div class="chat-box" id="chatBox">
+        <div class="conversation" id="conversation-direction">
+          <div class="message received">📥 Bonjour chef, besoin de l'état d'avancement.</div>
+        </div>
+        <div class="conversation" id="conversation-client" style="display:none;">
+          <div class="message received">📥 Merci pour votre rapport.</div>
+        </div>
+        <div class="conversation" id="conversation-supplier" style="display:none;">
+          <div class="message received">📥 Les matériaux arrivent demain.</div>
+        </div>
+        <div class="conversation" id="conversation-hr" style="display:none;">
+          <div class="message received">📥 Reçu, nous vous répondrons bientôt.</div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <input type="text" id="messageInput" placeholder="Écrivez un message..." />
+        <button onclick="sendMessage()">Envoyer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentConversation = '';
+
+  function showConversation(contact) {
+    document.querySelectorAll('.conversation').forEach(conv => {
+      conv.style.display = 'none';
+    });
+    const selected = document.getElementById('conversation-' + contact);
+    if (selected) selected.style.display = 'block';
+    document.getElementById('contactName').textContent = contact.toUpperCase();
+    currentConversation = contact;
+  }
+
+  function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const message = input.value.trim();
+    if (message && currentConversation) {
+      const conv = document.getElementById('conversation-' + currentConversation);
+      const msg = document.createElement('div');
+      msg.classList.add('message', 'sent');
+      msg.innerText = `📤 ${message}`;
+      conv.appendChild(msg);
+      input.value = '';
+      document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
+    }
+  }
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('active');
+  }
+
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+  }
+</script>
+
+</body>
+</html>

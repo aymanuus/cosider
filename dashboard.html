@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - Cosider</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <style>
+    .submenu {
+      display: none;
+      list-style: none;
+      padding-left: 20px;
+    }
+    .sidebar-menu li:hover .submenu {
+      display: block;
+    }
+    .submenu li a {
+      font-size: 14px;
+      padding-left: 10px;
+      display: block;
+    }
+  </style>
+</head>
+<body class="light-mode">
+
+  <!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="cosider2.png" alt="Logo Cosider" class="sidebar-logo" />
+      <span class="close-btn" onclick="toggleSidebar()">✖</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Accueil</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-bars"></i> Menu principale</a>
+        <ul class="submenu">
+          <li><a href="budjet.html">▫️ Budjet</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#"><i class="fa-solid fa-truck-pickup"></i> Matériels</a>
+        <ul class="submenu">
+          <li><a href="listemateriels.html">▫️ Liste Matériels</a></li>
+          <li><a href="listemarques.html">▫️ Liste Marques</a></li>
+          <li><a href="#">▫️ Structure</a></li>
+          <li><a href="#">▫️ NT</a></li>
+        </ul>
+      </li>
+      <li><a href="messagerie.html"><i class="fa-brands fa-rocketchat"></i> Messagerie</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-sliders"></i> Parametre</a>
+        <ul class="submenu">
+          <li>
+            <a href="#"><i class="fa-solid fa-street-view"></i> Direction</a>
+            <ul class="submenu">
+              <li><a href="#">▫️ Equipement</a></li>
+              <li><a href="#">▫️ Gamme</a></li>
+              <li><a href="#">▫️ Intervention</a></li>
+            </ul>
+          </li>
+          <li><a href="#"><i class="fa-brands fa-ubuntu"></i> Operation</a></li>
+          <li><a href="#"><i class="fa-solid fa-cube"></i> PDR</a></li>
+          <li><a href="structures.html"><i class="fa-solid fa-building"></i> Gestion des Structures</a></li> <!-- Ajouté ici -->
+        </ul>
+      </li>
+    </ul>
+</aside>
+
+
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <h1>Bienvenue, Chef de Chantier</h1>
+      <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</button>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="cards">
+      <div class="card">
+        <button class="card-btn" onclick="toggleSection('projetsActuels')">📌 Projets en cours</button>
+        <div class="dropdown" id="projetsActuels">
+          <button class="sub-btn" onclick="toggleSection('chantier1')">Chantier Actif</button>
+          <div class="dropdown" id="chantier1">
+            <p>📍 Alger, Algérie</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <button class="card-btn" onclick="toggleSection('projetsTermines')">✅ Projets terminés</button>
+        <div class="dropdown" id="projetsTermines">
+          <p>Projet Béton Oued Smar</p>
+          <p>Projet Logement Bab Ezzouar</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <button class="card-btn" onclick="toggleSection('notifications')">🔔 Notifications</button>
+        <div class="dropdown" id="notifications">
+          <p>📩 3 nouveaux messages</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="facture-btn" onclick="toggleFacture()">🧾 Factures</button>
+      <button class="requisition-btn" onclick="toggleRequisition()">📦 Requisitions</button>
+      <button class="upload-btn" onclick="document.getElementById('pdfUpload').click()">➕ Nouvelle Requisition</button>
+      <input type="file" id="pdfUpload" accept="application/pdf" onchange="validatePDF()" style="display: none;" />
+    </div>
+
+    <!-- Tables -->
+    <div class="facture-table-container" id="factureTable">
+      <h2>Factures</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Facture N°</th>
+            <th>Client</th>
+            <th>Montant</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>F001</td>
+            <td>Entreprise BTP Maghreb</td>
+            <td>1 200 000 DZD</td>
+            <td>2025-04-01</td>
+          </tr>
+          <tr>
+            <td>F002</td>
+            <td>Groupe Immo Sahel</td>
+            <td>850 000 DZD</td>
+            <td>2025-03-21</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="requisition-table-container" id="requisitionTable">
+      <h2>Matériel Requisitionné</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Matériel</th>
+            <th>Quantité</th>
+            <th>Statut</th>
+            <th>Suivi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>BULLDOZER</td>
+            <td>2 unités</td>
+            <td>Approuvé</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>PELLE MÉCANIQUE</td>
+            <td>3 unités</td>
+            <td>En attente</td>
+            <td><button class="track-btn">Suivre</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    function toggleSection(id) {
+      const section = document.getElementById(id);
+      section.classList.toggle("active");
+    }
+
+    function toggleFacture() {
+      const table = document.getElementById("factureTable");
+      table.style.display = table.style.display === "block" ? "none" : "block";
+    }
+
+    function toggleRequisition() {
+      const table = document.getElementById("requisitionTable");
+      table.style.display = table.style.display === "block" ? "none" : "block";
+    }
+
+    function validatePDF() {
+      const input = document.getElementById("pdfUpload");
+      const file = input.files[0];
+      if (file && file.type !== "application/pdf") {
+        alert("❌ Seuls les fichiers PDF sont autorisés !");
+        input.value = "";
+      } else if (file) {
+        alert("✅ Fichier PDF chargé : " + file.name);
+      }
+    }
+
+    function toggleSidebar() {
+      document.getElementById("sidebar").classList.toggle("active");
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+  </script>
+
+</body>
+</html>

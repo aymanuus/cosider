@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="listemateriels.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Matériels - Direction Centrale | Cosider</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body class="light-mode">
+
+  <!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="cosider2.png" alt="Logo Cosider" class="sidebar-logo" />
+      <span class="close-btn" onclick="toggleSidebar()">✖</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Accueil</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-bars"></i> Menu principale</a>
+        <ul class="submenu">
+          <li><a href="budjet.html">▫️ Budjet</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#"><i class="fa-solid fa-truck-pickup"></i> Matériels</a>
+        <ul class="submenu">
+          <li><a href="listemateriels.html">▫️ Liste Matériels</a></li>
+          <li><a href="listemarques.html">▫️ Liste Marques</a></li>
+          <li><a href="#">▫️ Structure</a></li>
+          <li><a href="#">▫️ NT</a></li>
+        </ul>
+      </li>
+      <li><a href="messagerie.html"><i class="fa-brands fa-rocketchat"></i> Messagerie</a></li>
+      <li>
+        <a href="#"><i class="fa-solid fa-sliders"></i> Parametre</a>
+        <ul class="submenu">
+          <li>
+            <a href="#"><i class="fa-solid fa-street-view"></i> Direction</a>
+            <ul class="submenu">
+              <li><a href="#">▫️ Equipement</a></li>
+              <li><a href="#">▫️ Gamme</a></li>
+              <li><a href="#">▫️ Intervention</a></li>
+            </ul>
+          </li>
+          <li><a href="#"><i class="fa-brands fa-ubuntu"></i> Operation</a></li>
+          <li><a href="#"><i class="fa-solid fa-cube"></i> PDR</a></li>
+          <li><a href="structures.html"><i class="fa-solid fa-building"></i> Gestion des Structures</a></li> <!-- Ajouté ici -->
+        </ul>
+      </li>
+    </ul>
+</aside>
+
+
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Topbar -->
+    <div class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <h1>Direction Centrale des Matériels - Cosider</h1>
+      <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</button>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="cards">
+      <div class="card">
+        <button class="card-btn" onclick="toggleSection('materielsDisponibles')">
+          <i class="fas fa-warehouse"></i> Matériels Disponibles
+        </button>
+        <div class="dropdown" id="materielsDisponibles">
+          <p><span class="badge">125</span> équipements en stock</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <button class="card-btn" onclick="toggleSection('materielsUtilises')">
+          <i class="fas fa-hard-hat"></i> Matériels Utilisés
+        </button>
+        <div class="dropdown" id="materielsUtilises">
+          <p><span class="badge">87</span> équipements en chantier</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <button class="card-btn" onclick="toggleSection('maintenance')">
+          <i class="fas fa-tools"></i> En Maintenance
+        </button>
+        <div class="dropdown" id="maintenance">
+          <p><span class="badge">15</span> équipements en réparation</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchMaterial" placeholder="Rechercher un matériel..." onkeyup="searchMaterials()">
+      </div>
+      
+      <div class="action-buttons">
+        <button class="action-btn add-btn" onclick="showAddMaterialBar()">
+          <i class="fas fa-plus-circle"></i>
+          <span>Nouveau Matériel</span>
+        </button>
+        <div class="dropdown">
+          <button class="action-btn export-btn">
+            <i class="fas fa-file-export"></i>
+            <span>Exporter</span>
+          </button>
+          <div class="dropdown-content">
+            <a href="#" onclick="exportToExcel()"><i class="fas fa-file-excel"></i> Excel</a>
+            <a href="#" onclick="exportToPDF()"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
+        </div>
+        <button class="action-btn import-btn" onclick="showImportModal()">
+          <i class="fas fa-file-import"></i>
+          <span>Importer</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Formulaire d'ajout -->
+    <div id="addMaterialBar" class="add-material-bar" style="display: none;">
+      <div class="form-container">
+        <h3><i class="fas fa-tools"></i> Ajouter un nouveau matériel</h3>
+        
+        <form id="materialForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="code">Code Matériel:</label>
+              <input type="text" id="code" required>
+            </div>
+            <div class="form-group">
+              <label for="dossier">N° Dossier:</label>
+              <input type="text" id="dossier" required>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="date">Date d'acquisition:</label>
+              <input type="date" id="date" required>
+            </div>
+            <div class="form-group">
+              <label for="type">Type:</label>
+              <select id="type" required>
+                <option value="">Sélectionner...</option>
+                <option value="Bulldozer">Bulldozer</option>
+                <option value="Pelle Mécanique">Pelle Mécanique</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="marque">Marque:</label>
+              <input type="text" id="marque" required>
+            </div>
+            <div class="form-group">
+              <label for="montant">Montant (DZD):</label>
+              <input type="number" id="montant" required>
+            </div>
+            <div class="form-group">
+              <label for="observations">Observations:</label>
+              <textarea id="observations" rows="3"></textarea>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" onclick="hideAddMaterialBar()">
+              <i class="fas fa-times"></i> Annuler
+            </button>
+            <button type="submit" class="btn-submit">
+              <i class="fas fa-save"></i> Enregistrer
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Tableau des Matériels -->
+    <div class="material-table-container">
+      <div class="table-header">
+        <h2><i class="fas fa-list"></i> Inventaire des Matériels</h2>
+        <div class="table-actions">
+          <input type="text" id="searchMaterial" placeholder="Rechercher..." onkeyup="searchMaterials()">
+          <select id="filterType" onchange="filterMaterials()">
+            <option value="all">Tous les types</option>
+            <option value="engin">Engin lourd</option>
+            <option value="vehicule">Véhicule</option>
+            <option value="outillage">Outillage</option>
+          </select>
+        </div>
+      </div>
+
+      <table id="materialsTable">
+        <thead>
+          <tr>
+            <th>N°</th>
+            <th>Code Matériel</th>
+            <th>Dossier</th>
+            <th>Date Acquisition</th>
+            <th>Type</th>
+            <th>Marque</th>
+            <th>Montant (DZD)</th>
+            <th>Observations</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>MAT-2023-001</td>
+            <td>DOS-1254</td>
+            <td>2023-03-15</td>
+            <td>Bulldozer</td>
+            <td>Caterpillar</td>
+            <td>12500000</td>
+            <td>Nouvel achat - Garantie 2 ans</td>
+            <td>
+              <button class="action-btn edit" onclick="editMaterial(1)"><i class="fas fa-edit"></i></button>
+              <button class="action-btn delete" onclick="deleteMaterial(1)"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+          <!-- More rows -->
+        </tbody>
+      </table>
+
+      <div class="table-footer">
+        <div class="pagination">
+          <button onclick="prevPage()"><i class="fas fa-chevron-left"></i></button>
+          <span>Page <span id="currentPage">1</span> sur 3</span>
+          <button onclick="nextPage()"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    function toggleSidebar() {
+      document.getElementById("sidebar").classList.toggle("active");
+    }
+
+    function deleteMaterial(code) {
+      if (confirm(`Voulez-vous supprimer le matériel ${code} ?`)) {
+        const rows = document.querySelectorAll("#materialsTable tbody tr");
+        rows.forEach(row => {
+          const cell = row.querySelector("td");
+          if (cell && parseInt(cell.textContent) === code) {
+            row.remove();
+          }
+        });
+      }
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+
+    function showAddMaterialBar() {
+      document.getElementById('addMaterialBar').style.display = 'block';
+    }
+
+    function hideAddMaterialBar() {
+      document.getElementById('addMaterialBar').style.display = 'none';
+    }
+
+    const originalSubmit = function(e) {
+      e.preventDefault();
+
+      const code = document.getElementById('code').value;
+      const dossier = document.getElementById('dossier').value;
+      const date = document.getElementById('date').value;
+      const type = document.getElementById('type').value;
+      const marque = document.getElementById('marque').value;
+      const montant = document.getElementById('montant').value;
+      const observations = document.getElementById('observations').value;
+
+      const table = document.getElementById('materialsTable').getElementsByTagName('tbody')[0];
+      const newRow = table.insertRow();
+
+      newRow.innerHTML = `
+        <td>${table.rows.length + 1}</td>
+        <td>${code}</td>
+        <td>${dossier}</td>
+        <td>${date}</td>
+        <td>${type}</td>
+        <td>${marque}</td>
+        <td>${montant}</td>
+        <td>${observations}</td>
+        <td>
+          <button class="action-btn edit" onclick="editMaterial(${table.rows.length})"><i class="fas fa-edit"></i></button>
+          <button class="action-btn delete" onclick="deleteMaterial(${table.rows.length})"><i class="fas fa-trash"></i></button>
+        </td>
+      `;
+
+      alert('Matériel ajouté avec succès!');
+      hideAddMaterialBar();
+      document.getElementById('materialForm').reset();
+    };
+
+    document.getElementById('materialForm').addEventListener('submit', originalSubmit);
+
+    function editMaterial(rowNumber) {
+      const table = document.getElementById('materialsTable').getElementsByTagName('tbody')[0];
+      const row = table.rows[rowNumber - 1];
+
+      if (!row) {
+        alert('Impossible de trouver la ligne.');
+        return;
+      }
+
+      const cells = row.getElementsByTagName('td');
+
+      document.getElementById('code').value = cells[1].textContent.trim();
+      document.getElementById('dossier').value = cells[2].textContent.trim();
+      document.getElementById('date').value = cells[3].textContent.trim();
+      document.getElementById('type').value = cells[4].textContent.trim();
+      document.getElementById('marque').value = cells[5].textContent.trim();
+      document.getElementById('montant').value = cells[6].textContent.trim();
+      document.getElementById('observations').value = cells[7].textContent.trim();
+
+      showAddMaterialBar();
+
+      const form = document.getElementById('materialForm');
+      form.onsubmit = function(e) {
+        e.preventDefault();
+
+        cells[1].textContent = document.getElementById('code').value;
+        cells[2].textContent = document.getElementById('dossier').value;
+        cells[3].textContent = document.getElementById('date').value;
+        cells[4].textContent = document.getElementById('type').value;
+        cells[5].textContent = document.getElementById('marque').value;
+        cells[6].textContent = document.getElementById('montant').value;
+        cells[7].textContent = document.getElementById('observations').value;
+
+        alert('Matériel modifié avec succès!');
+        hideAddMaterialBar();
+        form.reset();
+
+        form.onsubmit = originalSubmit;
+      };
+    }
+  </script>
+</body>
+</html>

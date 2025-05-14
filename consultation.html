@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Consultation Budjet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #ff0000;
+      color: white;
+    }
+    input[type="text"] {
+      width: 60px;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Consultation Budjet</h1>
+
+<div id="tableContainer">
+  <!-- Table will be loaded here -->
+</div>
+
+<script>
+    function renderConsultationTable() {
+      const tableContainer = document.getElementById("tableContainer");
+      const savedData = localStorage.getItem("budjetData");
+    
+      if (!savedData) {
+        tableContainer.innerHTML = "<p>Aucune donnée disponible.</p>";
+        return;
+      }
+    
+      const budjetData = JSON.parse(savedData);
+    
+      let html = `
+        <table>
+          <thead>
+            <tr>
+              <th>NT</th>
+              <th>Type Matériel</th>
+              <th>Type Location</th>
+              <th>Jan</th>
+              <th>Fev</th>
+              <th>Mar</th>
+              <th>Avr</th>
+              <th>Mai</th>
+              <th>Juin</th>
+              <th>Juil</th>
+              <th>Août</th>
+              <th>Sept</th>
+              <th>Oct</th>
+              <th>Nov</th>
+              <th>Déc</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+    
+      budjetData.forEach(row => {
+        html += `<tr>
+          <td>${row.nt}</td>
+          <td>${row.typeMat}</td>
+          <td>${row.typeLoc}</td>`;
+        
+        row.months.forEach(monthVal => {
+          html += `<td>${monthVal || ''}</td>`;
+        });
+    
+        html += `</tr>`;
+      });
+    
+      html += `
+          </tbody>
+        </table>
+      `;
+    
+      tableContainer.innerHTML = html;
+    }
+    
+    renderConsultationTable();
+    </script>
+    
+
+</body>
+</html>
